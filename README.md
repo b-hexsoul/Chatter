@@ -5,15 +5,10 @@
 
 ## Installation
 
-Move to server directory with:
-cd server/
+Move to server directory with: cd server/
 
-Install Dependencies
+Install Dependencies: npm i
 
-npm i
-createdb -U <your username> chatter_db
-npm run db:create
+Create DB: createdb -U <your username> chatter_db
 
-Dependencies installed and DB created
-
-Start server with npm run dev
+Run NPM Script: npm run db:create
