@@ -6,7 +6,7 @@
     "dev": "nodemon ./bin/www",
     "debug": "nodemon  --inspect ./bin/www",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --timeout 30000",
-    "db:create": "node model/db.init.js"
+    "db:create": "node config/db.init.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
