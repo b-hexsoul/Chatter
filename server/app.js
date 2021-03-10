@@ -3,6 +3,7 @@ const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const helmet = require("helmet");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
@@ -11,6 +12,7 @@ const { json, urlencoded } = express;
 
 const app = express();
 
+app.use(helmet());
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
