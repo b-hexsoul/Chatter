@@ -21,17 +21,25 @@ const user = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
+        isEmail: {
+          msg: "Not a valid email",
+        },
       },
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        len: {
+          args: [6, 64],
+          msg: "Password must be at least 6 characters long",
+        },
+      },
     },
   });
 
   // Add method to check if password is valid (users hashed pw)
-  User.prototype.validPassword = async (password) => {
+  User.prototype.validPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
   };
 
