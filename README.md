@@ -1,7 +1,14 @@
-# Express Starter
+## Tech Used
 
-This starter repo will be used for building applications using React, Material-UI, React-Router, Node, & Express.js.
+[Node.js](https://nodejs.org/en/)
+[Express](https://expressjs.com/)
 
-## Getting started
+## Installation
 
-The project is broken down into a client and server folder.
+Move to server directory with: cd server/
+
+Install Dependencies: npm i
+
+Create DB: createdb -U <your username> chatter_db
+
+Run NPM Script: npm run db:create
