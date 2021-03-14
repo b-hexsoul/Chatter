@@ -9,13 +9,10 @@ exports.register = async (req, res) => {
   try {
     // Create a new user
     const newUser = await db.User.create(req.body);
-    let { id, firstName, lastName, username } = newUser.dataValues;
+    let { id, username } = newUser.dataValues;
 
     // Create JWT
-    let token = jsonwebtoken.sign(
-      { id: id, name: `${firstName} ${lastName}`, username: username },
-      JWT_SECRET
-    );
+    let token = jsonwebtoken.sign({ id: id, username: username }, JWT_SECRET);
 
     // Set httpOnly cookie with JWT
     res.cookie("token", token, {
@@ -49,13 +46,10 @@ exports.login = async (req, res) => {
     if (!isValidPw) {
       return res.status(400).send({ message: "Invalid Password" });
     } else {
-      let { id, firstName, lastName, username } = user.dataValues;
+      let { id, username } = user.dataValues;
 
       // Create JWT
-      let token = jsonwebtoken.sign(
-        { id: id, name: `${firstName} ${lastName}`, username: username },
-        JWT_SECRET
-      );
+      let token = jsonwebtoken.sign({ id: id, username: username }, JWT_SECRET);
 
       // Set httpOnly cookie with JWT
       res.cookie("token", token, {
