@@ -15,25 +15,25 @@ import * as Yup from "yup";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: "100vh",
     "& .MuiInput-underline:before": {
-      borderBottom: "1.2px solid rgba(0, 0, 0, 0.2)"
-    }
+      borderBottom: "1.2px solid rgba(0, 0, 0, 0.2)",
+    },
   },
   welcome: {
     fontSize: 26,
     paddingBottom: 20,
     color: "#000000",
-    fontWeight: 500
+    fontWeight: 500,
   },
   heroText: {
     fontSize: 26,
     textAlign: "center",
     color: "white",
     marginTop: 30,
-    maxWidth: 300
+    maxWidth: 300,
   },
   overlay: {
     backgroundImage:
@@ -45,7 +45,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 145,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   buttonHeader: {
     display: "flex",
@@ -54,7 +54,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     bgcolor: "background.paper",
     minHeight: "100vh",
-    paddingTop: 23
+    paddingTop: 23,
   },
   accBtn: {
     width: 170,
@@ -64,7 +64,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#ffffff",
     color: "#3a8dff",
     boxShadow: "none",
-    marginRight: 35
+    marginRight: 35,
   },
   noAccBtn: {
     fontSize: 14,
@@ -72,13 +72,13 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400,
     textAlign: "center",
     marginRight: 21,
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
   image: {
     backgroundImage: "url(./images/bg-img.png)",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
-    backgroundPosition: "center"
+    backgroundPosition: "center",
   },
   box: {
     padding: 24,
@@ -88,11 +88,11 @@ const useStyles = makeStyles(theme => ({
     minHeight: "100vh",
     flexDirection: "column",
     maxWidth: 900,
-    margin: "auto"
+    margin: "auto",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   label: { fontSize: 19, color: "rgb(0,0,0,0.4)", paddingLeft: "5px" },
   submit: {
@@ -104,18 +104,18 @@ const useStyles = makeStyles(theme => ({
     marginTop: 49,
     fontSize: 16,
     fontWeight: "bold",
-    backgroundColor: "#3a8dff"
+    backgroundColor: "#3a8dff",
   },
   inputs: {
     marginTop: ".8rem",
     height: "2rem",
-    padding: "5px"
+    padding: "5px",
   },
   link: { textDecoration: "none", display: "flex", flexWrap: "nowrap" },
   forgot: {
     paddingRight: 10,
-    color: "#3a8dff"
-  }
+    color: "#3a8dff",
+  },
 }));
 
 // Login middleware placeholder
@@ -123,10 +123,19 @@ function useLogin() {
   const history = useHistory();
 
   const login = async (email, password) => {
-    console.log(email, password);
-    const res = await fetch(
-      `/auth/login?email=${email}&password=${password}`
-    ).then(res => res.json());
+    let data = {
+      email,
+      password,
+    };
+
+    const res = await fetch(`/auth/login`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((res) => res.json());
     localStorage.setItem("user", res.user);
     localStorage.setItem("token", res.token);
     history.push("/dashboard");
@@ -195,7 +204,7 @@ export default function Login() {
             <Formik
               initialValues={{
                 email: "",
-                password: ""
+                password: "",
               }}
               validationSchema={Yup.object().shape({
                 email: Yup.string()
@@ -204,7 +213,7 @@ export default function Login() {
                 password: Yup.string()
                   .required("Password is required")
                   .max(100, "Password is too long")
-                  .min(6, "Password too short")
+                  .min(6, "Password too short"),
               })}
               onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
                 setStatus();
@@ -214,7 +223,7 @@ export default function Login() {
                     console.log(email, password);
                     return;
                   },
-                  error => {
+                  (error) => {
                     setSubmitting(false);
                     setStatus(error);
                   }
@@ -233,7 +242,7 @@ export default function Login() {
                     fullWidth
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true
+                      shrink: true,
                     }}
                     InputProps={{ classes: { input: classes.inputs } }}
                     name="email"
@@ -254,7 +263,7 @@ export default function Login() {
                     fullWidth
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true
+                      shrink: true,
                     }}
                     InputProps={{
                       classes: { input: classes.inputs },
@@ -262,7 +271,7 @@ export default function Login() {
                         <Typography className={classes.forgot}>
                           Forgot?
                         </Typography>
-                      )
+                      ),
                     }}
                     type="password"
                     autoComplete="current-password"
@@ -295,7 +304,7 @@ export default function Login() {
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
-            horizontal: "center"
+            horizontal: "center",
           }}
           open={open}
           autoHideDuration={6000}
