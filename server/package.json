@@ -2,14 +2,18 @@
   "name": "server",
   "version": "0.0.0",
   "private": true,
+  "main": "./bin/www",
   "scripts": {
     "dev": "nodemon ./bin/www",
+    "start:dev": "concurrently \"nodemon --ignore 'client/*'\" \"npm run client\"",
+    "client": "cd ../client && npm run start",
     "debug": "nodemon  --inspect ./bin/www",
     "test": "NODE_ENV=test ./node_modules/.bin/mocha --exit --timeout 30000",
     "db:create": "node config/db.init.js"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "concurrently": "^6.0.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
