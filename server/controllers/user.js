@@ -22,6 +22,11 @@ exports.register = async (req, res) => {
     });
 
     // End Response
+    res.status(201).send({
+      message: "You signed up!",
+      token: token,
+      user: { id, username },
+    });
     res.status(201).send({ message: "You signed up!" });
   } catch (error) {
     res.status(400).send({ message: "There was an error", error });
@@ -29,13 +34,13 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, password } = req.body;
 
   try {
-    // Search for username in User Table
+    // Search for email in User Table
     const user = await db.User.findOne({
       where: {
-        username: username,
+        email: email,
       },
     });
 
@@ -56,7 +61,9 @@ exports.login = async (req, res) => {
         httpOnly: true,
         secure: true,
       });
-      res.status(201).send({ message: "You are logged in!", user });
+      res
+        .status(201)
+        .send({ message: "You are logged in!", user: { id, username } });
     }
   } catch (error) {
     console.error("there was an error", error);

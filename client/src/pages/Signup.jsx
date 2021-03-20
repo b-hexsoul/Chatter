@@ -15,19 +15,19 @@ import * as Yup from "yup";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     minHeight: "100vh",
     "& .MuiInput-underline:before": {
-      borderBottom: "1.2px solid rgba(0, 0, 0, 0.2)"
-    }
+      borderBottom: "1.2px solid rgba(0, 0, 0, 0.2)",
+    },
   },
   welcome: {
     fontSize: 26,
     paddingBottom: 20,
     color: "#000000",
     fontWeight: 700,
-    fontFamily: "'Open Sans'"
+    fontFamily: "'Open Sans'",
   },
   heroText: {
     fontSize: 26,
@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     textAlign: "center",
     color: "white",
     marginTop: 30,
-    maxWidth: 300
+    maxWidth: 300,
   },
   overlay: {
     backgroundImage:
@@ -47,7 +47,7 @@ const useStyles = makeStyles(theme => ({
     paddingBottom: 145,
     display: "flex",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   buttonHeader: {
     display: "flex",
@@ -56,7 +56,7 @@ const useStyles = makeStyles(theme => ({
     flexDirection: "column",
     bgcolor: "background.paper",
     minHeight: "100vh",
-    paddingTop: 23
+    paddingTop: 23,
   },
   accBtn: {
     width: 170,
@@ -66,7 +66,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#ffffff",
     color: "#3a8dff",
     boxShadow: "none",
-    marginRight: 35
+    marginRight: 35,
   },
   noAccBtn: {
     fontSize: 14,
@@ -74,13 +74,13 @@ const useStyles = makeStyles(theme => ({
     fontWeight: 400,
     textAlign: "center",
     marginRight: 21,
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
   },
   image: {
     backgroundImage: "url(./images/bg-img.png)",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
-    backgroundPosition: "center"
+    backgroundPosition: "center",
   },
   box: {
     padding: 24,
@@ -90,11 +90,11 @@ const useStyles = makeStyles(theme => ({
     minHeight: "100vh",
     flexDirection: "column",
     maxWidth: 900,
-    margin: "auto"
+    margin: "auto",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   label: { fontSize: 19, color: "rgb(0,0,0,0.4)", paddingLeft: "5px" },
   submit: {
@@ -106,30 +106,40 @@ const useStyles = makeStyles(theme => ({
     marginTop: 49,
     fontSize: 16,
     backgroundColor: "#3a8dff",
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   inputs: {
     marginTop: ".8rem",
     height: "2rem",
-    padding: "5px"
+    padding: "5px",
   },
-  link: { textDecoration: "none", display: "flex", flexWrap: "nowrap" }
+  link: { textDecoration: "none", display: "flex", flexWrap: "nowrap" },
 }));
 
 function useRegister() {
   const history = useHistory();
 
-  const login = async (username, email, password) => {
-    console.log(email, password);
-    const res = await fetch(
-      `/auth/signup?username=${username}&email=${email}&password=${password}`
-    ).then(res => res.json());
+  const register = async (username, email, password) => {
+    let data = {
+      username,
+      email,
+      password,
+    };
+
+    const res = await fetch(`/auth/register`, {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    }).then((res) => res.json());
     console.log(res);
     localStorage.setItem("user", res.user);
     localStorage.setItem("token", res.token);
     history.push("/dashboard");
   };
-  return login;
+  return register;
 }
 
 export default function Register() {
@@ -156,7 +166,7 @@ export default function Register() {
       <Grid item xs={false} sm={4} md={5} className={classes.image}>
         <Box className={classes.overlay}>
           <Hidden xsDown>
-            <img width={67} src="/images/chatBubble.png" />
+            <img width={67} src="/images/chatBubble.png" alt="chat bubble" />
             <Hidden smDown>
               <Typography className={classes.heroText}>
                 Converse with anyone with any language
@@ -196,8 +206,9 @@ export default function Register() {
             </Grid>
             <Formik
               initialValues={{
+                username: "",
                 email: "",
-                password: ""
+                password: "",
               }}
               validationSchema={Yup.object().shape({
                 username: Yup.string()
@@ -209,7 +220,7 @@ export default function Register() {
                 password: Yup.string()
                   .required("Password is required")
                   .max(100, "Password is too long")
-                  .min(6, "Password too short")
+                  .min(6, "Password too short"),
               })}
               onSubmit={(
                 { username, email, password },
@@ -222,7 +233,7 @@ export default function Register() {
                     console.log(email, password);
                     return;
                   },
-                  error => {
+                  (error) => {
                     setSubmitting(false);
                     setStatus(error);
                   }
@@ -243,10 +254,9 @@ export default function Register() {
                       </Typography>
                     }
                     fullWidth
-                    id="username"
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true
+                      shrink: true,
                     }}
                     InputProps={{ classes: { input: classes.inputs } }}
                     name="username"
@@ -267,7 +277,7 @@ export default function Register() {
                     fullWidth
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true
+                      shrink: true,
                     }}
                     InputProps={{ classes: { input: classes.inputs } }}
                     name="email"
@@ -287,10 +297,10 @@ export default function Register() {
                     fullWidth
                     margin="normal"
                     InputLabelProps={{
-                      shrink: true
+                      shrink: true,
                     }}
                     InputProps={{
-                      classes: { input: classes.inputs }
+                      classes: { input: classes.inputs },
                     }}
                     type="password"
                     autoComplete="current-password"
@@ -298,7 +308,6 @@ export default function Register() {
                     error={touched.password && Boolean(errors.password)}
                     value={values.password}
                     onChange={handleChange}
-                    type="password"
                   />
 
                   <Box textAlign="center">
@@ -321,7 +330,7 @@ export default function Register() {
         <Snackbar
           anchorOrigin={{
             vertical: "bottom",
-            horizontal: "center"
+            horizontal: "center",
           }}
           open={open}
           autoHideDuration={6000}
