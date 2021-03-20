@@ -27,6 +27,7 @@ exports.register = async (req, res) => {
       token: token,
       user: { id, username },
     });
+    res.status(201).send({ message: "You signed up!" });
   } catch (error) {
     res.status(400).send({ message: "There was an error", error });
   }
@@ -62,7 +63,7 @@ exports.login = async (req, res) => {
       });
       res
         .status(201)
-        .send({ message: "You are logged in!", token, user: { id, username } });
+        .send({ message: "You are logged in!", user: { id, username } });
     }
   } catch (error) {
     console.error("there was an error", error);
