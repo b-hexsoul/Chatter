@@ -7,8 +7,29 @@
 
 Move to server directory with: cd server/
 
-Install Dependencies: npm i
+Create a .env file in server/ root and add variables
 
-Create DB: createdb -U <your username> chatter_db
+```
+PGUSER=_your username_
+PGHOST=localhost
+PGDATABASE=chatter_db
+PGPASSWORD=_your password_
+```
 
-Run NPM Script: npm run db:create
+Install Dependencies
+
+```
+npm i
+```
+
+Create DB
+
+```
+createdb -U <your username> chatter_db
+```
+
+Run NPM Script
+
+```
+npm run db:create
+```

@@ -3,14 +3,6 @@ const saltRounds = 10;
 
 const user = (sequelize, DataTypes) => {
   const User = sequelize.define("User", {
-    firstName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    lastName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -21,7 +13,9 @@ const user = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       validate: {
-        isEmail: true,
+        isEmail: {
+          msg: "Not a valid email",
+        },
       },
     },
     password: {
@@ -31,7 +25,7 @@ const user = (sequelize, DataTypes) => {
   });
 
   // Add method to check if password is valid (users hashed pw)
-  User.prototype.validPassword = async (password) => {
+  User.prototype.validPassword = async function (password) {
     return await bcrypt.compare(password, this.password);
   };
 
