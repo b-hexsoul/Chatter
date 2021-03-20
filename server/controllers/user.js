@@ -22,7 +22,7 @@ exports.register = async (req, res) => {
     });
 
     // End Response
-    res.status(201).send({ message: "You signed up!", token: token });
+    res.status(201).send({ message: "You signed up!" });
   } catch (error) {
     res.status(400).send({ message: "There was an error", error });
   }
@@ -39,7 +39,6 @@ exports.login = async (req, res) => {
       },
     });
 
-    console.log("user", user.dataValues);
     // Check password against hashed password
     let isValidPw = await user.validPassword(password);
 

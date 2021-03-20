@@ -21,12 +21,6 @@ const user = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        len: {
-          args: [6, 64],
-          msg: "Password must be at least 6 characters long",
-        },
-      },
     },
   });
 
