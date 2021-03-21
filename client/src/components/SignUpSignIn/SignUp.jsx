@@ -1,4 +1,5 @@
-import React from "react";
+import { useState, useEffect, useContext } from "react";
+import UserContext from "../../context/userContext";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
@@ -42,8 +43,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function useRegister() {
+export default function Register() {
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErorrMessage] = useState("");
+  const { state, dispatch } = useContext(UserContext);
+
   const history = useHistory();
+
+  useEffect(() => {
+    if (state.user) history.push("/dashboard");
+  }, [state.user, history]);
 
   const register = async (username, email, password) => {
     let data = {
@@ -52,39 +62,35 @@ function useRegister() {
       password,
     };
 
-    const res = await fetch(`/auth/register`, {
+    fetch(`/auth/register`, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }).then((res) => res.json());
-    console.log(res);
-    localStorage.setItem("user", res.user);
-    localStorage.setItem("token", res.token);
-    history.push("/dashboard");
+    }).then((res) => {
+      res.json().then((data) => {
+        if (res.ok) {
+          dispatch({
+            type: "SET_USER",
+            payload: {
+              user: data.user,
+            },
+          });
+          history.push("/dashboard");
+        } else {
+          setErorrMessage(data.error);
+          setOpen(true);
+        }
+      });
+    });
   };
-  return register;
-}
-
-export default function Register() {
-  const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
-
-  const register = useRegister();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
     setOpen(false);
   };
-
-  const history = useHistory();
-
-  React.useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) history.push("/dashboard");
-  }, []);
 
   return (
     <>
@@ -122,7 +128,7 @@ export default function Register() {
             register(username, email, password).then(
               () => {
                 // useHistory push to chat
-                console.log(email, password);
+
                 return;
               },
               (error) => {
@@ -219,9 +225,9 @@ export default function Register() {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="Email already exists"
+        message={errorMessage}
         action={
-          <React.Fragment>
+          <>
             <IconButton
               size="small"
               aria-label="close"
@@ -230,7 +236,7 @@ export default function Register() {
             >
               <CloseIcon fontSize="small" />
             </IconButton>
-          </React.Fragment>
+          </>
         }
       />
     </>

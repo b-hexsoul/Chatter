@@ -43,9 +43,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// Login middleware placeholder
-function useLogin() {
+export default function Login() {
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
+  const [errorMessage, setErorrMessage] = useState("");
+  const { state, dispatch } = useContext(UserContext);
+
   const history = useHistory();
+
+  useEffect(() => {
+    if (state.user) history.push("/dashboard");
+  }, [state.user, history]);
 
   const login = async (email, password) => {
     let data = {
@@ -53,34 +61,32 @@ function useLogin() {
       password,
     };
 
-    const res = await fetch(`/auth/login`, {
+    fetch(`/auth/login`, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(data),
-    }).then((res) => res.json());
-    localStorage.setItem("user", res.user);
-    localStorage.setItem("token", res.token);
-    history.push("/dashboard");
+    }).then((res) => {
+      res.json().then((data) => {
+        // if response is in 200s then set user context and move to dashboard
+        if (res.ok) {
+          dispatch({
+            type: "SET_USER",
+            payload: {
+              user: data.user,
+            },
+          });
+          history.push("/dashboard");
+        } else {
+          // If email or password is invalid, set message and open snackbar popup
+          setErorrMessage(data.error);
+          setOpen(true);
+        }
+      });
+    });
   };
-  return login;
-}
-
-export default function Login({ setUserContext }) {
-  const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const user = useContext(UserContext);
-
-  const history = useHistory();
-
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) history.push("/dashboard");
-  }, []);
-
-  const login = useLogin();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -116,7 +122,7 @@ export default function Login({ setUserContext }) {
             login(email, password).then(
               () => {
                 // useHistory push to chat
-                console.log(email, password);
+
                 return;
               },
               (error) => {
@@ -196,7 +202,7 @@ export default function Login({ setUserContext }) {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="Login failed"
+        message={errorMessage}
         action={
           <>
             <IconButton
