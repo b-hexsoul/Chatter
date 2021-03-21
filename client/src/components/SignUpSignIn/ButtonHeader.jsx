@@ -2,6 +2,7 @@ import Box from "@material-ui/core/Box";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
+import { Typography } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   accBtn: {
@@ -22,7 +23,12 @@ const useStyles = makeStyles((theme) => ({
     marginRight: 21,
     whiteSpace: "nowrap",
   },
-  buttonBox: { textDecoration: "none", display: "flex", flexWrap: "nowrap" },
+  buttonBox: {
+    textDecoration: "none",
+    display: "flex",
+    flexWrap: "nowrap",
+    alignItems: "center",
+  },
 }));
 
 const ButtonHeader = ({ hasAccount, changeAccountStatus }) => {
@@ -31,14 +37,9 @@ const ButtonHeader = ({ hasAccount, changeAccountStatus }) => {
   return (
     <Box p={1} alignSelf="flex-end" alignItems="center">
       <Box className={classes.buttonBox}>
-        <Button
-          className={classes.noAccBtn}
-          onClick={() => {
-            changeAccountStatus();
-          }}
-        >
+        <Typography className={classes.noAccBtn}>
           {hasAccount ? "Don't have an account?" : "Already have an account?"}
-        </Button>
+        </Typography>
         <Button
           color="background"
           className={classes.accBtn}
