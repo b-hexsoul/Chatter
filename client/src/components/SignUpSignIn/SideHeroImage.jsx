@@ -38,7 +38,7 @@ const SideHeroImage = () => {
     <Grid item xs={false} sm={4} md={5} className={classes.image}>
       <Box className={classes.overlay}>
         <Hidden xsDown>
-          <img width={67} src={""} alt="Chat Bubble" />
+          <img width={67} src="/images/chatBubble.png" alt="chat bubble" />
           <Hidden smDown>
             <p className={classes.heroText}>
               Converse with anyone with any language
