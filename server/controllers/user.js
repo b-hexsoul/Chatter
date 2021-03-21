@@ -22,13 +22,14 @@ exports.register = async (req, res) => {
     });
 
     // End Response
-    res.status(201).send({
-      message: "You signed up!",
-      token: token,
-      user: { id, username },
-    });
+    res.status(201).json({ user: { id, username } });
   } catch (error) {
-    res.status(400).send({ message: "There was an error", error });
+    // find which input caused error
+    let input = error.errors[0].path;
+    let message =
+      input === "email" ? "This email is taken" : "This username is taken";
+
+    res.status(400).json({ error: message });
   }
 };
 
@@ -43,11 +44,14 @@ exports.login = async (req, res) => {
       },
     });
 
+    // If no user found with email return response to client
+    if (!user) return res.status(400).json({ error: "Email not found" });
+
     // Check password against hashed password
     let isValidPw = await user.validPassword(password);
 
     if (!isValidPw) {
-      return res.status(400).send({ message: "Invalid Password" });
+      return res.status(400).json({ error: "Invalid Password" });
     } else {
       let { id, username } = user.dataValues;
 
@@ -60,12 +64,9 @@ exports.login = async (req, res) => {
         httpOnly: true,
         secure: true,
       });
-      res
-        .status(201)
-        .send({ message: "You are logged in!", token, user: { id, username } });
+      res.status(201).json({ user: { id, username } });
     }
   } catch (error) {
-    console.error("there was an error", error);
-    res.status(400).send({ message: "There was an error", error });
+    res.status(400).json({ error });
   }
 };
