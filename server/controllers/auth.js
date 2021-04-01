@@ -5,6 +5,9 @@ require("dotenv").config();
 
 const { JWT_SECRET, JWT_EXPIRES } = process.env;
 
+// @desc    Register a new user
+// @route   POST /auth/register
+// @access  Public
 exports.register = async (req, res) => {
   try {
     // Create a new user
@@ -18,7 +21,6 @@ exports.register = async (req, res) => {
     res.cookie("token", token, {
       maxAge: 1000 * 60 * 60,
       httpOnly: true,
-      secure: true,
     });
 
     // End Response
@@ -33,6 +35,9 @@ exports.register = async (req, res) => {
   }
 };
 
+// @desc    Login an existing user
+// @route   POST /auth/login
+// @access  Public
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
@@ -62,11 +67,17 @@ exports.login = async (req, res) => {
       res.cookie("token", token, {
         maxAge: 1000 * 60 * 60,
         httpOnly: true,
-        secure: true,
       });
       res.status(201).json({ user: { id, username } });
     }
   } catch (error) {
     res.status(400).json({ error });
   }
+};
+
+// @desc    Authenticate if token is valid return user
+// @route   POST /auth/authenticate
+// @access  Public
+exports.authenticate = (req, res, next) => {
+  res.status(200).json({ user: req.user });
 };
