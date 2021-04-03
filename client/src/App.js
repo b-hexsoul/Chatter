@@ -1,20 +1,16 @@
-import { useReducer } from "react";
 import { MuiThemeProvider } from "@material-ui/core";
 import { theme } from "./themes/theme.js";
 // import { createMuiTheme, responsiveFontSizes } from '@material-ui/core/styles';
 import routes from "./config/routes";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
-import UserContext from "./context/userContext";
-import userReducer from "./context/userReducer";
+import AuthProvider from "./context/Auth/authProvider";
 import "./App.css";
 
 function App() {
-  const [state, dispatch] = useReducer(userReducer, UserContext);
-
   return (
     <MuiThemeProvider theme={theme}>
-      <BrowserRouter>
-        <UserContext.Provider value={{ state, dispatch }}>
+      <AuthProvider>
+        <BrowserRouter>
           <Switch>
             {routes.map((route) => (
               <Route
@@ -27,8 +23,8 @@ function App() {
               <Redirect to="/welcome" />
             </Route>
           </Switch>
-        </UserContext.Provider>
-      </BrowserRouter>
+        </BrowserRouter>
+      </AuthProvider>
     </MuiThemeProvider>
   );
 }
