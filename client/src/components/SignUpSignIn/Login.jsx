@@ -1,5 +1,4 @@
-import { useContext, useState, useEffect } from "react";
-import UserContext from "../../context/userContext";
+import { useContext, useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
@@ -12,6 +11,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { AuthDispatchContext } from "../../context/Auth/authDispatchContext";
 
 const useStyles = makeStyles((theme) => ({
   welcome: {
@@ -43,17 +43,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
-  const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [errorMessage, setErorrMessage] = useState("");
-  const { state, dispatch } = useContext(UserContext);
-
+const useLogin = () => {
   const history = useHistory();
-
-  useEffect(() => {
-    if (state.user) history.push("/dashboard");
-  }, [state.user, history]);
+  const setUser = useContext(AuthDispatchContext);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [open, setOpen] = useState(false);
 
   const login = async (email, password) => {
     let data = {
@@ -72,21 +66,25 @@ export default function Login() {
       res.json().then((data) => {
         // if response is in 200s then set user context and move to dashboard
         if (res.ok) {
-          dispatch({
-            type: "SET_USER",
-            payload: {
-              user: data.user,
-            },
-          });
+          setUser(data.user);
           history.push("/dashboard");
+          return data;
         } else {
           // If email or password is invalid, set message and open snackbar popup
-          setErorrMessage(data.error);
+          setErrorMessage(data.error);
           setOpen(true);
+          return data;
         }
       });
     });
   };
+
+  return { login, errorMessage, setErrorMessage, setOpen, open };
+};
+
+export default function Login() {
+  const classes = useStyles();
+  const { login, setOpen, errorMessage, open } = useLogin();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -122,7 +120,6 @@ export default function Login() {
             login(email, password).then(
               () => {
                 // useHistory push to chat
-
                 return;
               },
               (error) => {

@@ -1,5 +1,4 @@
-import { useState, useEffect, useContext } from "react";
-import UserContext from "../../context/userContext";
+import { useState, useContext } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Box from "@material-ui/core/Box";
@@ -12,6 +11,7 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { AuthDispatchContext } from "../../context/Auth/authDispatchContext";
 
 const useStyles = makeStyles((theme) => ({
   welcome: {
@@ -43,17 +43,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Register() {
-  const classes = useStyles();
+const useRegister = () => {
   const [open, setOpen] = useState(false);
-  const [errorMessage, setErorrMessage] = useState("");
-  const { state, dispatch } = useContext(UserContext);
-
+  const [errorMessage, setErrorMessage] = useState("");
+  const setUser = useContext(AuthDispatchContext);
   const history = useHistory();
-
-  useEffect(() => {
-    if (state.user) history.push("/dashboard");
-  }, [state.user, history]);
 
   const register = async (username, email, password) => {
     let data = {
@@ -72,20 +66,22 @@ export default function Register() {
     }).then((res) => {
       res.json().then((data) => {
         if (res.ok) {
-          dispatch({
-            type: "SET_USER",
-            payload: {
-              user: data.user,
-            },
-          });
+          setUser(data.user);
           history.push("/dashboard");
         } else {
-          setErorrMessage(data.error);
+          setErrorMessage(data.error);
           setOpen(true);
         }
       });
     });
   };
+
+  return { register, open, setOpen, errorMessage };
+};
+
+export default function Register() {
+  const classes = useStyles();
+  const { register, open, setOpen, errorMessage } = useRegister();
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
