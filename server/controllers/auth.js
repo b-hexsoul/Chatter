@@ -81,3 +81,11 @@ exports.login = async (req, res) => {
 exports.authenticate = (req, res, next) => {
   res.status(200).json({ user: req.user });
 };
+
+// @desc    Logout the user
+// @route   POST /auth/logout
+// @access  Public
+exports.logout = (req, res, next) => {
+  res.clearCookie("token", { httpOnly: true });
+  res.status(200).json({ message: "You are logged out!" });
+};
