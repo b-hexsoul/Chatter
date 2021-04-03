@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Paper from "@material-ui/core/Paper";
@@ -8,6 +9,7 @@ import ButtonHeader from "../components/SignUpSignIn/ButtonHeader";
 import Login from "../components/SignUpSignIn/Login";
 import SignUp from "../components/SignUpSignIn/SignUp";
 import SideHeroImage from "../components/SignUpSignIn/SideHeroImage";
+import { AuthStateContext } from "../context/Auth/authStateContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -30,10 +32,16 @@ const useStyles = makeStyles((theme) => ({
 const SignUpSignIn = () => {
   const classes = useStyles();
   const [hasAccount, setHasAccount] = useState(true);
+  const { user } = useContext(AuthStateContext);
+  const history = useHistory();
 
   const changeAccountStatus = () => {
     setHasAccount(!hasAccount);
   };
+
+  useEffect(() => {
+    if (user) history.push("/dashboard");
+  }, [user, history]);
 
   return (
     <Grid container component="main" className={classes.root}>
