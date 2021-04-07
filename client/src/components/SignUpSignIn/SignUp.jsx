@@ -50,30 +50,30 @@ const useRegister = () => {
   const history = useHistory();
 
   const register = async (username, email, password) => {
-    let data = {
+    const userInfo = {
       username,
       email,
       password,
     };
 
-    fetch(`/auth/register`, {
+    let response = fetch(`/auth/register`, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
-    }).then((res) => {
-      res.json().then((data) => {
-        if (res.ok) {
-          setUser(data.user);
-          history.push("/dashboard");
-        } else {
-          setErrorMessage(data.error);
-          setOpen(true);
-        }
-      });
+      body: JSON.stringify(userInfo),
     });
+
+    let data = await response.json();
+
+    if (response.ok) {
+      setUser(data.user);
+      history.push("/dashboard");
+    } else {
+      setErrorMessage(data.error);
+      setOpen(true);
+    }
   };
 
   return { register, open, setOpen, errorMessage };
@@ -121,17 +121,7 @@ export default function Register() {
             { setStatus, setSubmitting }
           ) => {
             setStatus();
-            register(username, email, password).then(
-              () => {
-                // useHistory push to chat
-
-                return;
-              },
-              (error) => {
-                setSubmitting(false);
-                setStatus(error);
-              }
-            );
+            register(username, email, password);
           }}
         >
           {({ handleSubmit, handleChange, values, touched, errors }) => (

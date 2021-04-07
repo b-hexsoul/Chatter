@@ -50,33 +50,31 @@ const useLogin = () => {
   const [open, setOpen] = useState(false);
 
   const login = async (email, password) => {
-    let data = {
+    let userLogin = {
       email,
       password,
     };
 
-    fetch(`/auth/login`, {
+    let response = await fetch(`/auth/login`, {
       method: "POST",
       credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
-    }).then((res) => {
-      res.json().then((data) => {
-        // if response is in 200s then set user context and move to dashboard
-        if (res.ok) {
-          setUser(data.user);
-          history.push("/dashboard");
-          return data;
-        } else {
-          // If email or password is invalid, set message and open snackbar popup
-          setErrorMessage(data.error);
-          setOpen(true);
-          return data;
-        }
-      });
+      body: JSON.stringify(userLogin),
     });
+
+    let data = await response.json();
+
+    if (response.ok) {
+      setUser(data.user);
+      history.push("/dashboard");
+      return data;
+    } else {
+      setErrorMessage(data.error);
+      setOpen(true);
+      return data;
+    }
   };
 
   return { login, errorMessage, setErrorMessage, setOpen, open };
@@ -96,9 +94,9 @@ export default function Login() {
       <Box width="100%" maxWidth={450} p={3} alignSelf="center">
         <Grid container>
           <Grid item xs>
-            <p className={classes.welcome} component="h1" variant="h5">
+            <Typography className={classes.welcome} component="h1" variant="h5">
               Welcome back!
-            </p>
+            </Typography>
           </Grid>
         </Grid>
         <Formik
@@ -117,16 +115,7 @@ export default function Login() {
           })}
           onSubmit={({ email, password }, { setStatus, setSubmitting }) => {
             setStatus();
-            login(email, password).then(
-              () => {
-                // useHistory push to chat
-                return;
-              },
-              (error) => {
-                setSubmitting(false);
-                setStatus(error);
-              }
-            );
+            login(email, password);
           }}
         >
           {({ handleSubmit, handleChange, values, touched, errors }) => (
