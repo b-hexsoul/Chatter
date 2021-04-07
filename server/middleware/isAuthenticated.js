@@ -3,11 +3,9 @@ require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
 module.exports = (req, res, next) => {
-  const cookie = req.cookies;
+  const { token } = req.cookies;
 
-  if (cookie["token"]) {
-    let token = cookie.split("=")[1];
-
+  if (token) {
     // Validate JWT
     jwt.verify(token, JWT_SECRET, (err, user) => {
       if (err) {
