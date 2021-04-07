@@ -3,21 +3,26 @@ const express = require("express");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-
-const indexRouter = require("./routes/index");
-const pingRouter = require("./routes/ping");
+const helmet = require("helmet");
 
 const { json, urlencoded } = express;
 
 const app = express();
 
+app.use(helmet());
 app.use(logger("dev"));
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
 
+// Routes
+const indexRouter = require("./routes/index");
+const authRouter = require("./routes/auth");
+const pingRouter = require("./routes/ping");
+
 app.use("/", indexRouter);
+app.use("/auth", authRouter);
 app.use("/ping", pingRouter);
 
 // catch 404 and forward to error handler
