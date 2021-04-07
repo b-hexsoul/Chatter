@@ -1,8 +1,13 @@
+const Conversation = require("./Conversation");
+const Message = require("./Message");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 const user = (sequelize, DataTypes) => {
   const User = sequelize.define("User", {
+    firstName: DataTypes.STRING,
+    lastName: DataTypes.STRING,
+    avatarImg: DataTypes.STRING,
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -35,6 +40,9 @@ const user = (sequelize, DataTypes) => {
     let hashedPassword = await bcrypt.hash(user.password, saltRounds);
     user.password = hashedPassword;
   });
+
+  User.belongsToMany(Conversation, { through: "UserConversation" });
+  User.hasMany(Message, { foreignKey: "sender" });
 
   return User;
 };
