@@ -1,23 +1,5 @@
-const User = require("./User");
-const Conversation = require("./Conversation");
-
-const userConversation = (sequelize, DataTypes) => {
-  const UserConversation = sequelize.define("UserConversation", {
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "id",
-      },
-    },
-    conversationId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: Conversation,
-        key: "id",
-      },
-    },
-  });
+const userConversation = (sequelize) => {
+  const UserConversation = sequelize.define("UserConversation");
 
   return UserConversation;
 };

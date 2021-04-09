@@ -1,5 +1,3 @@
-const Conversation = require("./Conversation");
-const Message = require("./Message");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
@@ -41,8 +39,15 @@ const user = (sequelize, DataTypes) => {
     user.password = hashedPassword;
   });
 
-  User.belongsToMany(Conversation, { through: "UserConversation" });
-  User.hasMany(Message, { foreignKey: "sender" });
+  User.associate = function (models) {
+    User.belongsToMany(models.Conversation, {
+      through: {
+        model: models.UserConversation,
+      },
+    });
+
+    User.hasMany(models.Message, { foreignKey: "sender" });
+  };
 
   return User;
 };
