@@ -1,13 +1,13 @@
 const message = (sequelize, DataTypes) => {
   const Message = sequelize.define("Message", {
-    sender: DataTypes.INTEGER,
+    userId: DataTypes.INTEGER,
     text: DataTypes.TEXT,
     conversationId: DataTypes.INTEGER,
   });
 
   Message.associate = function (models) {
-    Message.belongsTo(models.Conversation);
-    Message.belongsTo(models.User, { foreignKey: "sender" });
+    Message.belongsTo(models.Conversation, { foreignKey: "conversationId" });
+    Message.belongsTo(models.User, { foreignKey: "userId" });
   };
 
   return Message;

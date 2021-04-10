@@ -3,9 +3,6 @@ const saltRounds = 10;
 
 const user = (sequelize, DataTypes) => {
   const User = sequelize.define("User", {
-    firstName: DataTypes.STRING,
-    lastName: DataTypes.STRING,
-    avatarImg: DataTypes.STRING,
     username: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -44,9 +41,13 @@ const user = (sequelize, DataTypes) => {
       through: {
         model: models.UserConversation,
       },
+      foreignKey: {
+        name: "userId",
+        field: "user_id",
+      },
     });
 
-    User.hasMany(models.Message, { foreignKey: "sender" });
+    User.hasMany(models.Message, { foreignKey: "userId" });
   };
 
   return User;
