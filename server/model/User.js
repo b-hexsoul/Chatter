@@ -41,10 +41,6 @@ const user = (sequelize, DataTypes) => {
       through: {
         model: models.UserConversation,
       },
-      foreignKey: {
-        name: "userId",
-        field: "user_id",
-      },
     });
 
     User.hasMany(models.Message, { foreignKey: "userId" });

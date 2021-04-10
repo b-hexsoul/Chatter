@@ -5,10 +5,6 @@ const conversation = (sequelize, DataTypes) => {
     Conversation.belongsToMany(models.User, {
       through: {
         model: models.UserConversation,
-        foreignKey: {
-          name: "conversationId",
-          field: "conversation_id",
-        },
       },
     });
 

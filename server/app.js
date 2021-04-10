@@ -4,7 +4,7 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const helmet = require("helmet");
-
+const isAuthenticated = require("./middleware/isAuthenticated");
 const { json, urlencoded } = express;
 
 const app = express();
@@ -20,10 +20,16 @@ app.use(express.static(join(__dirname, "public")));
 const indexRouter = require("./routes/index");
 const authRouter = require("./routes/auth");
 const pingRouter = require("./routes/ping");
+const userRouter = require("./routes/user");
+const messageRouter = require("./routes/message");
+const conversationRouter = require("./routes/conversation");
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/ping", pingRouter);
+app.use("/api/user", isAuthenticated, userRouter);
+app.use("/api/messages", isAuthenticated, messageRouter);
+app.use("/api/conversation", isAuthenticated, conversationRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
