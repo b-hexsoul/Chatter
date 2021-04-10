@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
         return res.status(401).json({ success: false, message: "Bad Token" });
       }
 
-      req.user = user;
+      req.user = user.username;
       next();
     });
   } else {
