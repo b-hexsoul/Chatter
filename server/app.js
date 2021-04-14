@@ -16,20 +16,8 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
 
-// Routes
-const indexRouter = require("./routes/index");
-const authRouter = require("./routes/auth");
-const pingRouter = require("./routes/ping");
-const userRouter = require("./routes/user");
-const messageRouter = require("./routes/message");
-const conversationRouter = require("./routes/conversation");
-
-app.use("/", indexRouter);
-app.use("/auth", authRouter);
-app.use("/ping", pingRouter);
-app.use("/api/user", isAuthenticated, userRouter);
-app.use("/api/messages", isAuthenticated, messageRouter);
-app.use("/api/conversation", isAuthenticated, conversationRouter);
+// Routers
+require("./routes")(app);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
