@@ -4,7 +4,7 @@ const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const helmet = require("helmet");
-
+const isAuthenticated = require("./middleware/isAuthenticated");
 const { json, urlencoded } = express;
 
 const app = express();
@@ -16,14 +16,8 @@ app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
 
-// Routes
-const indexRouter = require("./routes/index");
-const authRouter = require("./routes/auth");
-const pingRouter = require("./routes/ping");
-
-app.use("/", indexRouter);
-app.use("/auth", authRouter);
-app.use("/ping", pingRouter);
+// Routers
+require("./routes")(app);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

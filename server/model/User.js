@@ -36,6 +36,16 @@ const user = (sequelize, DataTypes) => {
     user.password = hashedPassword;
   });
 
+  User.associate = function (models) {
+    User.belongsToMany(models.Conversation, {
+      through: {
+        model: models.UserConversation,
+      },
+    });
+
+    User.hasMany(models.Message, { foreignKey: "userId" });
+  };
+
   return User;
 };
 
