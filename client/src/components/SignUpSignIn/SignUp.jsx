@@ -69,7 +69,7 @@ const useRegister = () => {
 
     if (response.ok) {
       setUser(data.user);
-      history.push("/dashboard");
+      history.push("/messenger");
     } else {
       setErrorMessage(data.error);
       setOpen(true);

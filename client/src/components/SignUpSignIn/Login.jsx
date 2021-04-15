@@ -68,7 +68,7 @@ const useLogin = () => {
 
     if (response.ok) {
       setUser(data.user);
-      history.push("/dashboard");
+      history.push("/messenger");
       return data;
     } else {
       setErrorMessage(data.error);
