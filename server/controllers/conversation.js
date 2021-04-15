@@ -36,7 +36,7 @@ exports.getAllUserConversations = async (req, res) => {
     });
 
     if (!conversations) {
-      return res.status(400).json({ success: true, data: [] });
+      return res.status(200).json({ success: true, data: [] });
     }
 
     return res.status(200).json({ success: true, data: conversations });
@@ -63,7 +63,7 @@ exports.getConversationMessages = async (req, res) => {
     });
 
     if (!messages) {
-      return res.status(400).json({ success: true, data: [] });
+      return res.status(200).json({ success: true, data: [] });
     }
 
     return res.status(200).json({ success: true, data: messages });
