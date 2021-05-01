@@ -12,6 +12,7 @@ import React from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+    height: "100%",
     backgroundColor: theme.palette.background.paper,
   },
   inline: {
