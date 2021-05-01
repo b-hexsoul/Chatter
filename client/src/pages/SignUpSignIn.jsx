@@ -40,7 +40,7 @@ const SignUpSignIn = () => {
   };
 
   useEffect(() => {
-    if (user) history.push("/dashboard");
+    if (user) history.push("/messenger");
   }, [user, history]);
 
   return (

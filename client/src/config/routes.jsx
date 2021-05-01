@@ -1,4 +1,4 @@
-import Dashboard from "../pages/Dashboard";
+import Messenger from "../pages/Messenger";
 import SignUpSignIn from "../pages/SignUpSignIn.jsx";
 
 const routes = [
@@ -7,8 +7,8 @@ const routes = [
     component: SignUpSignIn,
   },
   {
-    path: "/dashboard",
-    component: Dashboard,
+    path: "/messenger",
+    component: Messenger,
   },
 ];
 
