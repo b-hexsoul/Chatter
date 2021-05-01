@@ -1,4 +1,5 @@
 import {
+  Chip,
   List,
   ListItem,
   ListItemAvatar,
@@ -11,7 +12,6 @@ import React from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "36ch",
     backgroundColor: theme.palette.background.paper,
   },
   inline: {
@@ -35,11 +35,26 @@ export default function UserList() {
   return (
     <List className={classes.root}>
       {users.map((user, idx) => (
-        <ListItem key={idx}>
+        <ListItem button disableRipple="true" key={idx}>
           <ListItemAvatar>
             <BadgeAvatar name={user.name} img={user.img} />
           </ListItemAvatar>
-          <ListItemText primary={user.name} />
+          <div style={{ "margin-left": 10 }}>
+            <ListItemText primary={user.name} />
+            <ListItemText secondary={"last message"} />
+          </div>
+          <div style={{ "margin-left": "auto" }}>
+            <Chip
+              label={1}
+              color="primary"
+              style={{
+                backgroundColor: "#3f92ff",
+                color: "#fff",
+                height: 25,
+                width: "100%",
+              }}
+            />
+          </div>
         </ListItem>
       ))}
     </List>
