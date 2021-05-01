@@ -5,28 +5,18 @@ import { InputBase } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   search: {
-    position: "relative",
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    "&:hover": {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
+    display: "flex",
+    backgroundColor: "#e9eef9",
+    alignItems: "center",
     marginLeft: 0,
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      marginLeft: theme.spacing(3),
-      width: "auto",
-    },
+    height: 50,
+    borderRadius: 5,
   },
   searchIcon: {
-    padding: theme.spacing(0, 2),
-    height: "100%",
-    position: "absolute",
-    pointerEvents: "none",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    position: "relative",
+    padding: 10,
+    color: "#bfc9db",
   },
 }));
 
@@ -40,11 +30,7 @@ export default function SearchBar() {
           <SearchIcon />
         </div>
         <InputBase
-          placeholder="Search…"
-          classes={{
-            root: classes.inputRoot,
-            input: classes.inputInput,
-          }}
+          placeholder="Search"
           inputProps={{ "aria-label": "search" }}
         />
       </div>
